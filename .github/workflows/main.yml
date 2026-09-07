@@ -12,7 +12,20 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      - name: Push to hub
-        env:
+          
+      - name: Set up git
+          run: |
+            git config user.email "actions@github.com"
+            git config user.name "GitHub Actions"
+            
+            - name: Pull latest changes from Hugging Face
+            env:
+            HF_TOKEN: ${{ secrets.HF_TOKEN }}
+            run: |
+            git remote add space https://bharambesapana:$HF_TOKEN@huggingface.co/spaces/bharambesapana/SB_chatbot_app main
+            git fetch space main
+            git merge space/main -- allow-unrelated-histories -- strategy-option=theirs
+                  - name: Push to hub
+                    env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: git push https://bharambesapana:$HF_TOKEN@huggingface.co/spaces/bharambesapana/SB_chatbot_app main
