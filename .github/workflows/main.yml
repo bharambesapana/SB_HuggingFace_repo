@@ -4,6 +4,7 @@ name: Sync to Hugging Face hub
     branches:
       - main
   workflow_dispatch: null
+
 jobs:
   sync-to-hub:
     runs-on: ubuntu-latest
@@ -12,29 +13,22 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      - name: Set up git
-        run: >
-          git config user.email "actions@github.com"
 
+      - name: Set up git
+        run: |
+          git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
 
-
-          - name: Pull latest changes from Hugging Face
-
-          env:
-
+      - name: Pull latest changes from Hugging Face
+        env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-
-          run: |
-
-          git remote add space
-          https://bharambesapana:$HF_TOKEN@huggingface.co/spaces/bharambesapana/SB_chatbot_app
-          main
-
+        run: |
+          git remote add space https://bharambesapana:$HF_TOKEN@huggingface.co/spaces/bharambesapana/SB_chatbot_app
           git fetch space main
+          git merge space/main --allow-unrelated-histories --strategy-option=theirs
 
-          git merge space/main -- allow-unrelated-histories --
-          strategy-option=theirs
-                - name: Push to hub
-                  env:
-          HF_TOKEN: '${{ secrets.HF_TOKEN }}'
+      - name: Push to hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git push space main
