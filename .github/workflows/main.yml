@@ -21,14 +21,14 @@ jobs:
 
       - name: Pull latest changes from Hugging Face
         env:
-          HF_TOKEN: ${{ secrets.HF_write_token }}
+          HF_write_token: ${{ secrets.HF_write_token }}
         run: |
-          git remote add space https://bharambesapana:$HF_TOKEN@huggingface.co/spaces/bharambesapana/SB_chatbot_app
+          git remote add space https://bharambesapana:$HF_write_token@huggingface.co/spaces/bharambesapana/SB_chatbot_app
           git fetch space main
           git merge space/main --allow-unrelated-histories --strategy-option=theirs
 
       - name: Push to hub
         env:
-          HF_TOKEN: ${{ secrets.HF_write_token }}
+          HF_write_token: ${{ secrets.HF_write_token }}
         run: |
           git push space main
