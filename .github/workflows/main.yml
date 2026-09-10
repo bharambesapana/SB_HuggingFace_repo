@@ -23,7 +23,8 @@ jobs:
         env:
           HF_write_token: ${{ secrets.HF_write_token }}
         run: |
-          git remote add space https://bharambesapana:$HF_write_token@huggingface.co/spaces/bharambesapana/SB_HuggingFace_repo
+          # Formatted URL to bypass the password deprecation check
+          git remote add space https://hf:${HF_write_token}@huggingface.co/spaces/bharambesapana/SB_chatbot_app
           git fetch space main
           git merge space/main --allow-unrelated-histories --strategy-option=theirs
 
